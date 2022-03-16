@@ -1,37 +1,44 @@
-import React, { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
 
-import { ToggleThemeContext } from '../../contexts/ToggleThemeContext';
+import { ContainerHeader } from './style';
 
-import { Container } from './styles';
+import logo from '../../../public/images/logo.png';
+import menu from '../../../public/images/menu.svg';
+import close from '../../../public/images/close.svg';
 
-export default function Header() {
-    const { theme, handleToggleTheme } = useContext(ToggleThemeContext);
+export function Header() {
+    const [menuIsOpen, setMenuIsOpen] = useState(false);
 
-    const history = useHistory();
-    
-    function handleNavigate() {
-        history.push('/');
-    }
+    function handleMenu() {
+        setMenuIsOpen(prevState => !prevState)
+    };
 
     return (
-        <Container
-            style={{
-                margin: 8,
-                padding: 24,
-                borderRadius: '10px',
-            }}
-        >
-            <h1>JStack's Blog</h1>
-            <button onClick={handleNavigate} style={{color: '#FFF'}}>
-                Voltar para a Home
-            </button>
-            <button
-                type="button"
-                onClick={handleToggleTheme}
-            >
-                {theme === 'dark' ? '🌞' : '🌚'}
-            </button>
-        </Container>
-    );
+        <ContainerHeader menuIsOpen={menuIsOpen}>
+            <div>
+                <img className="imagem-logo" src={logo} alt="Logo" />
+                <span>Doe sangue</span>
+            </div>
+
+            <nav>
+                { menuIsOpen ?
+                    <>
+                        <div className="button-close">
+                            <button onClick={handleMenu}>
+                                <img src={close} alt="Fechar" />
+                            </button> 
+                        </div> 
+                        <div className="links">
+                            <a onClick={handleMenu} href="#inicio">Início</a>
+                            <a onClick={handleMenu} href="#verificar">Verificar</a>
+                            <a onClick={handleMenu} href="#contatos">Contatos</a>
+                        </div> 
+                    </> :
+                    <button onClick={handleMenu}>
+                        <img src={menu} alt="Menu" />
+                    </button>
+                }
+            </nav>
+        </ContainerHeader>
+    )
 }
